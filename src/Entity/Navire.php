@@ -6,7 +6,10 @@ use App\Repository\NavireRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
+#[Assert\Unique(fiefds: ['imo', 'mmsi', 'indicatifAppel'])]
 #[ORM\Entity(repositoryClass: NavireRepository::class)]
+#[ORM\Index(name: 'ind_IMO', columns: ['imo'])]
+#[ORM\Index(name: 'ind_MMSI', columns: ['mmsi'])]
 class Navire {
 
     #[Assert\Unique(fields: ['IMO', 'MMSI', 'indicatifAppel'])]
@@ -43,6 +46,10 @@ class Navire {
     #[ORM\ManyToOne(inversedBy: 'navires')]
     #[ORM\JoinColumn(nullable: false)]
     private ?AisShipType $type = null;
+
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(name: 'idpays', referencedColumnName: 'id', nullable: false)]
+    private ?Pays $pavillon = null;
 
     public function getId(): ?int {
         return $this->id;
@@ -128,14 +135,22 @@ class Navire {
         return $this;
     }
 
-    public function getType(): ?AisShipType
-    {
+    public function getType(): ?AisShipType {
         return $this->type;
     }
 
-    public function setType(?AisShipType $type): static
-    {
+    public function setType(?AisShipType $type): static {
         $this->type = $type;
+
+        return $this;
+    }
+
+    public function getPavillon(): ?Pays {
+        return $this->pavillon;
+    }
+
+    public function setPavillon(?Pays $pavillon): static {
+        $this->pavillon = $pavillon;
 
         return $this;
     }
