@@ -30,8 +30,20 @@ class Port {
     #[ORM\InverseJoinColumn(name: 'idaisshiptype', referencedColumnName: 'id')]
     private Collection $types;
 
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(name: 'idpays', nullable: false)]
+    private ?Pays $pays = null;
+
+    #[ORM\OneToMany(mappedBy: 'destination', targetEntity: Navire::class)]
+    private Collection $navires;
+
+    #[ORM\OneToMany(mappedBy: 'port', targetEntity: Escale::class, orphanRemoval: true)]
+    private Collection $escales;
+
     public function __construct() {
         $this->types = new ArrayCollection();
+        $this->navires = new ArrayCollection();
+        $this->escales = new ArrayCollection();
     }
 
     public function getId(): ?int {
@@ -75,6 +87,76 @@ class Port {
 
     public function removeType(AisShipType $type): static {
         $this->types->removeElement($type);
+
+        return $this;
+    }
+
+    public function getPays(): ?Pays {
+        return $this->pays;
+    }
+
+    public function setPays(?Pays $pays): static {
+        $this->pays = $pays;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Navire>
+     */
+    public function getNavires(): Collection
+    {
+        return $this->navires;
+    }
+
+    public function addNavire(Navire $navire): static
+    {
+        if (!$this->navires->contains($navire)) {
+            $this->navires->add($navire);
+            $navire->setDestination($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNavire(Navire $navire): static
+    {
+        if ($this->navires->removeElement($navire)) {
+            // set the owning side to null (unless already changed)
+            if ($navire->getDestination() === $this) {
+                $navire->setDestination(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Escale>
+     */
+    public function getEscales(): Collection
+    {
+        return $this->escales;
+    }
+
+    public function addEscale(Escale $escale): static
+    {
+        if (!$this->escales->contains($escale)) {
+            $this->escales->add($escale);
+            $escale->setPort($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEscale(Escale $escale): static
+    {
+        if ($this->escales->removeElement($escale)) {
+            // set the owning side to null (unless already changed)
+            if ($escale->getPort() === $this) {
+                $escale->setPort(null);
+            }
+        }
 
         return $this;
     }

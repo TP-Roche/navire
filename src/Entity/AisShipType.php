@@ -33,8 +33,7 @@ class AisShipType {
     #[ORM\ManyToMany(targetEntity: Port::class, mappedBy: 'types')]
     private Collection $portsCompatibles;
 
-    public function __construct()
-    {
+    public function __construct() {
         $this->navires = new ArrayCollection();
         $this->portsCompatibles = new ArrayCollection();
     }
@@ -66,13 +65,11 @@ class AisShipType {
     /**
      * @return Collection<int, Navire>
      */
-    public function getNavires(): Collection
-    {
+    public function getNavires(): Collection {
         return $this->navires;
     }
 
-    public function addNavire(Navire $navire): static
-    {
+    public function addNavire(Navire $navire): static {
         if (!$this->navires->contains($navire)) {
             $this->navires->add($navire);
             $navire->setType($this);
@@ -81,8 +78,7 @@ class AisShipType {
         return $this;
     }
 
-    public function removeNavire(Navire $navire): static
-    {
+    public function removeNavire(Navire $navire): static {
         if ($this->navires->removeElement($navire)) {
             // set the owning side to null (unless already changed)
             if ($navire->getType() === $this) {
@@ -96,13 +92,11 @@ class AisShipType {
     /**
      * @return Collection<int, Port>
      */
-    public function getPortsCompatibles(): Collection
-    {
+    public function getPortsCompatibles(): Collection {
         return $this->portsCompatibles;
     }
 
-    public function addPortsCompatible(Port $portsCompatible): static
-    {
+    public function addPortsCompatible(Port $portsCompatible): static {
         if (!$this->portsCompatibles->contains($portsCompatible)) {
             $this->portsCompatibles->add($portsCompatible);
             $portsCompatible->addType($this);
@@ -111,8 +105,7 @@ class AisShipType {
         return $this;
     }
 
-    public function removePortsCompatible(Port $portsCompatible): static
-    {
+    public function removePortsCompatible(Port $portsCompatible): static {
         if ($this->portsCompatibles->removeElement($portsCompatible)) {
             $portsCompatible->removeType($this);
         }
