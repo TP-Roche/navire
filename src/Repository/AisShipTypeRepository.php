@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\AisShipType;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\ORM\Query\Expr\Join;
 
 /**
  * @extends ServiceEntityRepository<AisShipType>
@@ -14,11 +15,23 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method AisShipType[]    findAll()
  * @method AisShipType[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class AisShipTypeRepository extends ServiceEntityRepository
-{
-    public function __construct(ManagerRegistry $registry)
-    {
+class AisShipTypeRepository extends ServiceEntityRepository {
+
+    public function __construct(ManagerRegistry $registry) {
         parent::__construct($registry, AisShipType::class);
+    }
+
+    public function getPortPaysInfoByAisShipTypeId(AisShipType $aisShipType): array {
+        $query = $this->createQueryBuilder('ast')
+                ->select('p.indicatif as portIndicatif', 'p.nom as portNom', 'pay.nom as paysNom', 'n.id as navireId')
+                ->innerJoin('ast.portsCompatibles', 'p')
+                ->innerJoin('p.pays', 'pay')
+                ->leftJoin('p.navires', 'n')
+                ->where('ast.id = :aisShipTypeId')
+                ->setParameter('aisShipTypeId', $aisShipType->getId())
+                ->getQuery();
+
+        return $query->getResult();
     }
 
 //    /**
@@ -35,7 +48,6 @@ class AisShipTypeRepository extends ServiceEntityRepository
 //            ->getResult()
 //        ;
 //    }
-
 //    public function findOneBySomeField($value): ?AisShipType
 //    {
 //        return $this->createQueryBuilder('a')

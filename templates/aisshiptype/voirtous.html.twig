@@ -14,7 +14,7 @@
             <tbody>
                 {% for type in aisShipTypes %}
                     <tr class="table-primary">
-                        <td>{{ type.aisshiptype }}</td>
+                        <td>{{ type.aisShipType }}</td>
                         <td>{{ type.libelle }}</td>
                         <td><a href="{{ path('aisshiptype portscompatibles', {id: type.id}) }}">Ports compatibles</a></td>
                     </tr>

@@ -2,22 +2,32 @@
 {% block title %}Ship types{% endblock %}
 
 {% block body %}
-    <div class="container">
-        <table class="table table-hover">
-            <thead>
-                <tr>
-                    <th scope="col" style="width: 100px;">Type</th>
-                    <th scope="col">Libelle</th>
-                    <th scope="col">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr class="table-primary">
-                    <td>{{ type.aisshiptype }}</td>
-                    <td>{{ type.libelle }}</td>
-                    <td><a href="{{ path('aisshiptype portscompatibles', {id: type.id}) }}">Ports compatibles</a></td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+    <h2>Ports compatibles</h2>
+    <h2>Type de navire : {{ aisShipTypes.id }} {{ aisShipTypes.libelle }}</h2>
+    {% if portPays %}
+        <div class="container">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col" style="width: 100px;">Indicatif</th>
+                        <th scope="col">Nom</th>
+                        <th scope="col">Pays</th>
+                        <th scope="col">Voir</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for portPays in portPays %}
+                        <tr class="table-primary">
+                            <td>{{ portPays.portIndicatif }}</td>
+                            <td>{{ portPays.portNom }}</td>
+                            <td>{{ portPays.paysNom }}</td>
+                            <td>{{ portPays.paysNom }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p>Aucun port disponible pour ce type de navire</p>
+    {% endif %}
 {% endblock %}
