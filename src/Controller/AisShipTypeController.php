@@ -7,8 +7,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\AisShipTypeRepository;
 use Symfony\Component\HttpFoundation\Request;
-use App\Repository\PaysRepository;
-use App\Repository\PortRepository;
 
 #[Route('/aisshiptype', name: 'aisshiptype')]
 class AisShipTypeController extends AbstractController {
